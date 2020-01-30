@@ -1,3 +1,8 @@
+# Introdução
+
+Aplicação Node.Js baseada nos vídeos da empresa Rocketseat
+- https://www.youtube.com/channel/UCSfwM5u0Kce6Cce8_S72olg
+
 # Pacotes Instalados
 ## dependencias
 yarn add bcryptjs
@@ -18,11 +23,9 @@ yarn add nodemon -D
 yarn add sqlite -D
 yarn add supertest -D
 
-
 # Comandos Importantes na Shell
 # yarn
 yarn sequelize db:create
-yarn sequelize migratin:create --name=
 yarn sequelize db:migrate
 yarn sequelize model:create --name Student --attributes classroom_id:integer,student_name:string
 
