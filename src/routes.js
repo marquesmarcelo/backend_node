@@ -7,7 +7,7 @@ const SessionController = require('./app/controllers/SessionController')
 const UserController = require('./app/controllers/UserController')
 const RoleController = require('./app/controllers/RoleController')
 const CidadeController = require('./app/controllers/CidadeController')
-const EstadoController = require('./app/controllers/CidadeController')
+const EstadoController = require('./app/controllers/EstadoController')
 
 //Query Params: request.query (filtros, ordenação, paginação, ...)
 //Route Params: request.params (identificar um recurso na alteração ou remoção)
@@ -28,10 +28,14 @@ routes.post('/api/users', UserController.store);
 routes.put('/api/users/:id', UserController.update);
 routes.delete('/api/users/:id', UserController.delete);
 
-routes.post('/api/users/:user_id/roles', RoleController.storeWithUserId);
+routes.post('/api/users/:user_id/roles', UserController.storeRole);
 
 routes.get('/api/cidades', CidadeController.index);
+routes.post('/api/cidades', CidadeController.store);
+
 routes.get('/api/estados', EstadoController.index);
+routes.post('/api/estados', EstadoController.store);
+routes.post('/api/estados/:estado_id/cidades', EstadoController.storeCidade);
 
 routes.get('/api/roles', RoleController.index);
 routes.get('/api/roles/:id', RoleController.getById);

@@ -19,7 +19,8 @@ yarn add sqlite -D
 yarn add supertest -D
 
 
-# Comandos na Shell
+# Comandos Importantes na Shell
+# yarn
 yarn sequelize db:create
 yarn sequelize migratin:create --name=
 yarn sequelize db:migrate
@@ -27,7 +28,7 @@ yarn sequelize model:create --name Student --attributes classroom_id:integer,stu
 
 yarn sequelize db:seed:all
 
+# Docker
 docker build -t backend_node/dockernode .
 docker run -p 5000:5000 -d backend_node/dockernode
-
 docker-compose up

@@ -13,6 +13,23 @@ class CidadeController {
             .catch((error) => res.status(400).json({ message: error }));
         ;
     }
+
+    async store(req, res) {        
+        const { nome, estado_id } = req.body;
+
+        const obj = await Cidade.findOne({ where: { nome, estado_id } })
+
+        if (obj)
+            return res.status(401).json({ message: 'Cidade já cadastrada' });
+
+        return await Cidade
+            .create({
+                nome, estado_id
+            })
+            .then((newObj) => res.status(201).json(newObj))
+            .catch((error) => res.status(400).json({ message: error }));
+        ;
+    }    
 }
 
 module.exports = new CidadeController();

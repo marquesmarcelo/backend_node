@@ -20,14 +20,14 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       
-      createdAt: {
+      created_at: {
+        type: Sequelize.DATE,
         allowNull: false,
-        type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
+        type: Sequelize.DATE,
         allowNull: false,
-        type: Sequelize.DATE
-      }
+      },
     });
   },
   down: (queryInterface, Sequelize) => {

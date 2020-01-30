@@ -29,26 +29,7 @@ class RoleController {
             .catch((error) => res.status(400).json({ message: error }));
         ;
     }
-
-    async storeWithUserId(req, res) {
-        const { nome_maquina, descricao } = req.body;
-        const user_id = req.params.user_id;
-
-        const user = await User.findByPk(user_id)
-
-        if (!user)
-            return res.status(401).json({ message: 'Usuário não encontrado' });
-
-        const [role, created] = await Role.findOrCreate({
-            where: { nome_maquina, descricao }
-        });
-
-        await user.addRole(role)
-            .catch((error) => res.status(400).json({ message: error }));
-
-        return res.status(200).json(role);
-    }
-
+    
     async getById(req, res) {
         const id = req.params.id;
 

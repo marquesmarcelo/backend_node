@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Role } = require('../models')
 
 class UserController {
     async index(req, res) {
@@ -91,6 +91,26 @@ class UserController {
                 message: error,
             }));
     }
+
+    async storeRole(req, res) {
+        const { nome_maquina, descricao } = req.body;
+        const user_id = req.params.user_id;
+
+        const user = await User.findByPk(user_id)
+
+        if (!user)
+            return res.status(401).json({ message: 'Usuário não encontrado' });
+
+        const [role, created] = await Role.findOrCreate({
+            where: { nome_maquina, descricao }
+        });
+
+        await user.addRole(role)
+            .catch((error) => res.status(400).json({ message: error }));
+
+        return res.status(200).json(role);
+    }
+
 }
 
 module.exports = new UserController();
