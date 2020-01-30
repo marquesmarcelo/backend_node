@@ -1,0 +1,33 @@
+# Pacotes Instalados
+## dependencias
+yarn add bcryptjs
+yarn add cross-env
+yarn add dotenv
+yarn add express
+yarn add factory-girl
+yarn add jsonwebtoken
+yarn add pg
+yarn add sequelize
+yarn add sequelize-cli
+yarn add util
+
+## dependencias de desenvolvimento
+yarn add faker -D
+yarn add jest -D
+yarn add nodemon -D
+yarn add sqlite -D
+yarn add supertest -D
+
+
+# Comandos na Shell
+yarn sequelize db:create
+yarn sequelize migratin:create --name=
+yarn sequelize db:migrate
+yarn sequelize model:create --name Student --attributes classroom_id:integer,student_name:string
+
+yarn sequelize db:seed:all
+
+docker build -t backend_node/dockernode .
+docker run -p 5000:5000 -d backend_node/dockernode
+
+docker-compose up
