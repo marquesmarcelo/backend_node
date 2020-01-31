@@ -3,9 +3,10 @@ require('dotenv').config({
 });
 
 const express = require('express');
-const routes = require('./routes');
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
+const routes = require('./routes');
+const errorHandler = require('./app/_helpers/error-handler');
 
 class AppController {
     constructor() {
@@ -13,6 +14,7 @@ class AppController {
 
         this.middlewares();
         this.routes();
+        this.errorHandler();
     }
 
     middlewares() {
@@ -22,9 +24,17 @@ class AppController {
                 extended: true,
             })
         );
+        this.express.use(cors());
+        
     }
     routes() {
-        this.express.use(routes);
+        // api routes
+        this.express.use('/users', require('./app/controllers/users.controller'));
+        //this.express.use(routes);
+    }
+    errorHandler() {
+       // global error handler
+       this.express.use(errorHandler);
     }
 }
 

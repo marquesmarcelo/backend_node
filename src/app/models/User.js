@@ -29,7 +29,8 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     User.prototype.generateToken = function () {
-        return jwt.sign({ id: this.id }, process.env.APP_SECRET);
+        console.log("Teste:"+this.roles.map(u => u.nome_maquina));       
+        return jwt.sign({ id: this.id, role: this.roles.map(u => u.nome_maquina) }, process.env.APP_SECRET);
     }
     return User;
 };
