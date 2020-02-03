@@ -1,16 +1,21 @@
 const jwt = require('jsonwebtoken');
 const { User, Role } = require('../models')
 
+function UserException(message) {
+    this.message = message
+}
+
 class UserService {
     
-    async getAll() {
+    async getAll(attributes, order, limit, offset) {
+
         return await User
             .findAll({
-                attributes: ['id', 'nome', 'email', 'createdAt', 'updatedAt'],
                 include: [{ model: Role, as: 'roles' },],
-                order: [
-                    ['createdAt', 'DESC']
-                ],
+                attributes,                
+                order,
+                limit,
+                offset
             })
             .then((list) => list)
             .catch((error) => { throw error });

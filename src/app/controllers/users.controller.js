@@ -5,8 +5,13 @@ const util = require('../utils/utils')
 class UserController {
     
     async getAll(req, res, next) {
+        const attributes = req.query.attributes || ['id', 'nome', 'email', 'createdAt', 'updatedAt'];
+        const order = req.query.order || [['nome', 'ASC']];
+        const limit = req.query.limit || 10;
+        const offset = req.query.offset || 0;
+
         try {
-            const allUsers = await userService.getAll();
+            const allUsers = await userService.getAll(attributes, order, limit, offset);
             if (allUsers.length > 0) {
                 util.setSuccess(200, 'Users retrieved', allUsers);
             } else {
@@ -14,7 +19,7 @@ class UserController {
             }
             return util.send(res);
         } catch (error) {
-            util.setError(400, error);
+            util.setError(400, error.message);
             return util.send(res);
         }
     }
