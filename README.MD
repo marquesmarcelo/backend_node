@@ -29,6 +29,7 @@ yarn sequelize db:create
 yarn sequelize db:migrate
 yarn sequelize model:create --name Student --attributes classroom_id:integer,student_name:string
 
+yarn sequelize seed:generate --name users
 yarn sequelize db:seed:all
 
 # Docker

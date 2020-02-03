@@ -5,8 +5,10 @@ require('dotenv').config({
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const routes = require('./routes');
-const errorHandler = require('./app/_helpers/error-handler');
+const errorHandler = require('./app/_helpers/error.handler');
+
+const userRoutes = require('./app/routes/user.routes')
+
 
 class AppController {
     constructor() {
@@ -25,16 +27,19 @@ class AppController {
             })
         );
         this.express.use(cors());
-        
+
     }
     routes() {
-        // api routes
-        this.express.use('/users', require('./app/controllers/users.controller'));
-        //this.express.use(routes);
+        // rota default
+        this.express.get('/api/', (request, response) => {
+            return response.json({ message: 'App Backend em Node.js' })
+        });
+
+        this.express.use('/api/users/', userRoutes);
     }
     errorHandler() {
-       // global error handler
-       this.express.use(errorHandler);
+        // global error handler
+        this.express.use(errorHandler);
     }
 }
 

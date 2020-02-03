@@ -18,7 +18,7 @@ function authorize(roles = []) {
             
             if (roles.length && !retorno.length) {
                 // user's role is not authorized
-                return res.status(401).json({ message: 'Unauthorized' });
+                return res.status(401).json({ message: 'Não autorizado' });
             }
 
             // authentication and authorization successful
