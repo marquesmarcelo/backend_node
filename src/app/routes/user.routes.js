@@ -1,5 +1,6 @@
 const router =  require('express').Router();
 const UserController = require('../controllers/users.controller');
+const SessionController = require('../controllers/session.controller');
 
 const authorize = require('../_helpers/authorize')
 
@@ -10,7 +11,7 @@ router.get('/dashboard', authorize(), (req, res) => {
 });
 
 //Rota da aplicação
-router.post('/authenticate', UserController.authenticate);     // public route
+//router.post('/authenticate', SessionController.authenticate);     // public route
 router.get('/', authorize(['ROLE_USER']), UserController.getAll); // admin only
 router.post('/', UserController.store); // admin only
 

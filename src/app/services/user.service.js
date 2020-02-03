@@ -1,29 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { User, Role } = require('../models')
 
-function UserException(message, name) {
-    this.message = message;
-    this.name = name || "UserException";
-}
-
 class UserService {
-    async login({ email, password }) {
-        const user = await User.findOne({
-            include: [{ model: Role, as: 'roles' },],
-            where: { email }
-        })
-
-        if (user) {
-            if ((await user.checkPassword(password))) {
-                return {
-                    user,
-                    token: user.generateToken()
-                };
-
-            }
-        }
-    }
-
+    
     async getAll() {
         return await User
             .findAll({
@@ -34,82 +13,85 @@ class UserService {
                 ],
             })
             .then((list) => list)
-            .catch((error) => { throw new UserException(error) });
+            .catch((error) => { throw error });
         ;
     }
 
+    async store(newUser) {
+        const user = await User.findOne({
+            where: { email: newUser.email }
+        })
+            .then((user) => {
+                if (user) throw 'Email já esta cadastrado'                
+            })
+            .catch((error) => { throw error });
+        
+        return await User
+            .create(newUser)
+            .then((newUser) => newUser)
+            .catch((error) => { throw error });
+        ;
+    }
+
+    async update(id, updatedUser) {
+        return await User
+            .findByPk(id)
+            .then(user => {
+                if (!user) throw 'Usuário não encontrado';
+
+                return user
+                    .update({
+                        nome: updatedUser.nome || user.nome,
+                        email: updatedUser.email || user.email,
+                        password: updatedUser.password || user.password,
+                    })
+                    .then((updatedUser) => updatedUser)
+                    .catch((error) =>  { throw error });
+            })
+            .catch((error) => { throw error });
+    }
+
     async getById(id) {
+
         return await User
             .findByPk(id, {
                 attributes: ['id', 'nome', 'email', 'createdAt', 'updatedAt'],
                 include: [{ model: Role, as: 'roles' },]
             })
             .then((obj) => {
-                if (!obj) throw new UserException('Usuário não encontrado', 'UserExceptionNotFound');
+                if (!obj) throw 'Usuário não encontrado';
 
                 return obj;
             })
-            .catch((error) => { throw new UserException(error) });
+            .catch((error) => { throw error });
     }
-
-    async store(nome, email, password) {
-        const obj = await User.findOne({ where: { email } })
-
-        if (obj) throw new UserException('Usuário já cadastrado', 'UserExceptionFound');
-
-        return await User
-            .create({
-                nome, email, password
-            })
-            .then((newObj) => newObj)
-            .catch((error) => { throw new UserException(error) });
-        ;
-    }
-
-    async update(id, nome, email, password) {
-        return await User
-            .findByPk(id)
-            .then(obj => {
-                if (!obj) throw new UserException('Usuário não encontrado', 'UserExceptionNotFound');
-
-                return obj
-                    .update({
-                        nome: nome || obj.nome,
-                        email: email || obj.email,
-                        password: password || obj.password,
-                    })
-                    .then(() => obj)
-                    .catch((error) => { throw new UserException(error) });
-            })
-            .catch((error) => { throw new UserException(error) });
-    }
+   
 
     async deleteObj(id) {
-
         return await User
             .findByPk(id)
             .then(obj => {
-                if (!obj) throw new UserException('Usuário não encontrado', 'UserExceptionNotFound');
+                if (!obj) throw 'Usuário não encontrado';
 
                 return obj
                     .destroy()
-                    .catch((error) => { throw new UserException(error) });
+                    .catch((error) => { throw error });
             })
-            .catch((error) => { throw new UserException(erro) });
+            .catch((error) => { throw error });
     }
 
     async storeRole(user_id, nome_maquina, descricao) {
 
         const user = await User.findByPk(user_id)
 
-        if (!user) throw new UserException('Usuário não encontrado', 'UserExceptionNotFound');
+        if (!user) throw 'Usuário não encontrado';
 
         const [role, created] = await Role.findOrCreate({
             where: { nome_maquina, descricao }
         });
 
         await user.addRole(role)
-            .catch((error) => { throw new UserException(error) });
+            .catch((error) => { throw error });
 
         return role;
     }
