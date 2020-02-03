@@ -16,7 +16,7 @@ describe ('Autenticação', () => {
         });
 
         const response = await request(app)
-        .post("/sessions")
+        .post("/api/users/authenticate")
         .send({
             email: user.email,
             password: "123123"
@@ -30,7 +30,7 @@ describe ('Autenticação', () => {
         });
 
         const response = await request(app)
-        .post("/sessions")
+        .post("/api/users/authenticate")
         .send({
             email: user.email,
             password: "invalido"
@@ -44,7 +44,7 @@ describe ('Autenticação', () => {
         });
 
         const response = await request(app)
-            .post("/sessions")
+            .post("/api/users/authenticate")
             .send({
                 email: user.email,
                 password: "123123"
@@ -57,18 +57,27 @@ describe ('Autenticação', () => {
         const user = await factory.create('User', {           
             password: "123123"
         });
-        
+
         const response = await request(app)
-            .get("/dashboard")
-            .set('Authorization', `Bearer ${user.generateToken()}`)
+            .post("/api/users/authenticate")
+            .send({
+                email: user.email,
+                password: "123123"
+            });
+
+        const { token } = response.body;        
+
+        const response_teste = await request(app)
+            .get("/api/users/dashboard")
+            .set('Authorization', `Bearer ${token}`)
             ;
-        expect(response.status).toBe(200);
+        expect(response_teste.status).toBe(200);
     });
 
     it('Verificar se usuario sem token acessa rotas privadas', async () => {      
 
         const response = await request(app)
-            .get("/dashboard");
+            .get("/api/users/dashboard");
 
         expect(response.status).toBe(401);
     });
@@ -76,7 +85,7 @@ describe ('Autenticação', () => {
     it('Verificar se usuario com token invalido acessa rotas privadas', async () => {
        
         const response = await request(app)
-            .get("/dashboard")
+            .get("/api/users/dashboard")
             .set('Authorization', `Bearer invalido`)
             
         expect(response.status).toBe(401);

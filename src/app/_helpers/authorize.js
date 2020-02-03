@@ -13,12 +13,10 @@ function authorize(roles = []) {
 
         // authorize based on user role
         (req, res, next) => {
-            
-            const retorno = roles.filter(value => req.user.role.includes(value))
-            
-            if (roles.length && !retorno.length) {
-                // user's role is not authorized
-                return res.status(401).json({ message: 'Não autorizado' });
+            //verificar interceção entre o vetor de roles informado e as permissões do usuário. 
+            //Se o tamanho da interceção for igual a zero o usuário não tem permissão para acessar o recurso
+            if (roles.length > 0 && !roles.filter(value => req.user.roles.includes(value)).length) {
+                return res.status(401).json({ message: 'Usuário não possui a(as) permissão(ões) ' + roles + ' necessárias para acessar este recurso' });
             }
 
             // authentication and authorization successful

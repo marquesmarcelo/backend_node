@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 const { User, Role } = require('../models')
 
-
 function UserException(message, name) {
     this.message = message;
     this.name = name || "UserException";
 }
+
 class UserService {
     async login({ email, password }) {
         const user = await User.findOne({

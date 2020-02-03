@@ -4,7 +4,7 @@ class UserController {
 
     async authenticate(req, res, next) {
         userService.login(req.body)
-            .then(user => user ? res.json(user) : res.status(400).json({ message: 'Nome de usuário ou senha incorreto' }))
+            .then(user => user ? res.json(user) : res.status(401).json({ message: 'Nome de usuário ou senha incorreto' }))
             .catch(err => next(err));
     }
 
@@ -18,9 +18,10 @@ class UserController {
         const currentUser = req.user;
         const id = parseInt(req.params.id);
 
+
         // permite somento usuário com a permissão 'ROLE_ADMIN' acessar o recurso
-        if (id !== currentUser.id && !currentUser.role.includes('ROLE_ADMIN')) {
-            return res.status(401).json({ message: 'Não autorizado' });
+        if (id !== currentUser.sub && !currentUser.roles.includes('ROLE_ADMIN')) {
+            return res.status(401).json({ message: 'Não autorizado a visualizar o registro id=' +id });
         }
 
         userService.getById(req.params.id)
