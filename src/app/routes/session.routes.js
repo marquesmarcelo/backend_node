@@ -5,36 +5,35 @@ const SessionController = require('../controllers/session.controller');
 
 /**
 * @swagger
-* /loginUser:
+* /session/login:
 *   post:
 *     tags:
-*       - Users
+*       - Sessão
 *     name: Login
-*     summary: Logs in a user
+*     summary: Autenticar com um usuário
 *     consumes:
 *       - application/json
 *     parameters:
 *       - name: body
 *         in: body
 *         schema:
-*           $ref: '#/definitions/User'
 *           type: object
 *           properties:
-*             username:
+*             email:
 *               type: string
 *             password:
 *               type: string
 *               format: password
 *         required:
-*           - username
+*           - email
 *           - password
 *     responses:
 *       200:
-*         description: User found and logged in successfully
+*         description: Usuário encontrado e logado com sucesso
 *       401:
-*         description: Bad username, not found in db
+*         description: Nome do usuário não encontrado no banco de dados
 *       403:
-*         description: Username and password don't match
+*         description: Nome do usuári e/ou senha inválido
 */
 router.post('/login', SessionController.login);     // public route
 

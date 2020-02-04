@@ -2,8 +2,7 @@ const userService = require('../services/user.service');
 
 const util = require('../utils/utils')
 
-class UserController {
-    
+class UserController {    
     async getAll(req, res, next) {
         const filter = req.query.attributes || { nome: "marcelo"};
         const attributes = req.query.attributes || ['id', 'nome', 'email', 'createdAt', 'updatedAt'];

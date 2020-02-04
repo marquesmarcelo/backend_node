@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-/* eslint-disable indent */
 /**
  * @swagger
  * definitions:
