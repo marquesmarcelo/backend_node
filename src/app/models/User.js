@@ -1,6 +1,33 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+/* eslint-disable indent */
+/**
+ * @swagger
+ * definitions:
+ *   User:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: integer
+ *       nome:
+ *         type: string
+ *       email:
+ *         type: integer
+ *       password:
+ *         type: string *       
+ *       createAt:
+ *         type: string
+ *         format: date-time
+ *       updateAt:
+ *         type: string
+ *         format: date-time
+ *       required:
+ *         - nome
+ *         - email
+ *         - password
+ */
+
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define(
         'User', {

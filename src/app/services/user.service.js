@@ -1,10 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { User, Role } = require('../models')
 
-function UserException(message) {
-    this.message = message
-}
-
 class UserService {
     
     async getAll(attributes, order, limit, offset) {
@@ -22,7 +18,7 @@ class UserService {
         ;
     }
 
-    async store(newUser) {
+    async create(newUser) {
         const user = await User.findOne({
             where: { email: newUser.email }
         })
@@ -72,7 +68,7 @@ class UserService {
     }
    
 
-    async deleteObj(id) {
+    async delete(id) {
         return await User
             .findByPk(id)
             .then(obj => {
@@ -85,9 +81,10 @@ class UserService {
             .catch((error) => { throw error });
     }
 
-    async storeRole(user_id, nome_maquina, descricao) {
+    async storeRole(user_id, alteredRole) {
 
         const user = await User.findByPk(user_id)
+        const { nome_maquina, descricao } = alteredRole
 
         if (!user) throw 'Usuário não encontrado';
 

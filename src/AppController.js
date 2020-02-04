@@ -12,13 +12,19 @@ const sessionRoutes = require('./app/routes/session.routes');
 
 const logger = require('morgan');
 
+const helmet = require('helmet')
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger')
 
 class AppController {
     constructor() {
         this.express = express();
 
         this.middlewares();
+        this.corsConfig();
         this.routes();
+        this.swaggerConfig();
         this.errorHandler();
     }
 
@@ -29,21 +35,36 @@ class AppController {
                 extended: true,
             })
         );
-        this.express.use(cors());
+
         this.express.use(logger('dev'))
+        //proteger contra ataques conhecidos
+        this.express.use(helmet())
 
     }
     routes() {
         // rota default
-        this.express.get('/api/', (request, response) => {
-            return response.json({ message: 'App Backend em Node.js' })
+        this.express.get('/api/', (req, res) => {
+            return res.json({ message: 'App Backend em Node.js' })
         });
 
         this.express.use('/api/session/', sessionRoutes);
 
         this.express.use('/api/users/', userRoutes);
-        
+
     }
+    swaggerConfig() {
+        // use swagger-Ui-express for your app documentation endpoint
+        this.express.use('/api/swagger.json', (req, res) => {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(swaggerSpec);
+        });
+
+        this.express.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    }
+    corsConfig() {
+        this.express.use(cors());
+    }
+
     errorHandler() {
         // global error handler
         this.express.use(errorHandler);

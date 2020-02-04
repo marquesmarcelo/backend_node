@@ -5,6 +5,7 @@ const util = require('../utils/utils')
 class UserController {
     
     async getAll(req, res, next) {
+        const filter = req.query.attributes || { nome: "marcelo"};
         const attributes = req.query.attributes || ['id', 'nome', 'email', 'createdAt', 'updatedAt'];
         const order = req.query.order || [['nome', 'ASC']];
         const limit = req.query.limit || 10;
@@ -13,15 +14,14 @@ class UserController {
         try {
             const allUsers = await userService.getAll(attributes, order, limit, offset);
             if (allUsers.length > 0) {
-                util.setSuccess(200, 'Users retrieved', allUsers);
+                util.setSuccess(200, 'Usuários recuperados', allUsers);
             } else {
-                util.setSuccess(200, 'No User found');
+                util.setSuccess(200, 'Nenhum usuário encontrado');
             }
-            return util.send(res);
         } catch (error) {
             util.setError(400, error.message);
-            return util.send(res);
         }
+        return util.send(res);
     }
 
     async getById(req, res, next) {
@@ -37,48 +37,41 @@ class UserController {
             const user = await userService.getById(id);
 
             if (!user) {
-                util.setError(404, `Cannot find user with the id ${id}`);
+                util.setError(404, `Não foi encontrado nenhum Usuário com o id= ${id}`);
             } else {
-                util.setSuccess(200, 'Found User', user);
+                util.setSuccess(200, 'Usuário encontrado', user);
             }
-            return util.send(res);
         } catch (error) {
             util.setError(404, error);
-            return util.send(res);
         }
+        return util.send(res);
     }
 
 
-    async deleteObj(req, res, next) {
+    async delete(req, res, next) {
         const id = parseInt(req.params.id);
 
         try {
-            const userToDelete = await userService.getById(id);
+            const userToDelete = await userService.delete(id);
+            util.setSuccess(200, 'Usuário deletado');
 
-            if (userToDelete) {
-                util.setSuccess(200, 'User deleted');
-            } else {
-                util.setError(404, `User with the id ${id} cannot be found`);
-            }
-            return util.send(res);
         } catch (error) {
             util.setError(400, error);
-            return util.send(res);
         }
+        return util.send(res);
     }
 
 
-    async store(req, res, next) {
+    async create(req, res, next) {
         const newUser = req.body;
 
         try {
-            const createdUser = await userService.store(newUser);
-            util.setSuccess(201, 'User Added!', createdUser);
-            return util.send(res);
+            const createdUser = await userService.create(newUser);
+            util.setSuccess(201, 'Usuário adicionado', createdUser);
         } catch (error) {
             util.setError(400, error);
-            return util.send(res);
         }
+        return util.send(res);
     }
 
     async update(req, res, next) {
@@ -86,25 +79,24 @@ class UserController {
         const alteredUser = req.body;
         try {
             const updateUser = await userService.update(id, alteredUser);
-            if (!updateUser) {
-                util.setError(404, `Cannot find user with the id: ${id}`);
-            } else {
-                util.setSuccess(200, 'User updated', updateUser);
-            }
-            return util.send(res);
+            util.setSuccess(200, 'Usuário atualizado', updateUser);
+                                   
         } catch (error) {
-            util.setError(404, error);
-            return util.send(res);
+            util.setError(404, error);            
         }
+        return util.send(res);
     }
 
     async storeRole(req, res, next) {
-        const { nome_maquina, descricao } = req.body;
-        const user_id = req.params.user_id;
-
-        userService.storeRole(user_id, nome_maquina, descricao)
-            .then(user => user ? res.json(user) : res.sendStatus(404))
-            .catch(err => next(err));
+        const alteredRole = req.body;
+        const user_id = req.params.user_id;        
+        try {            
+            const role = await userService.storeRole(user_id, alteredRole)
+            util.setSuccess(200, 'Role adicionada ao usuário', role);
+        } catch (error) {
+            util.setError(404, error);
+        }
+        return util.send(res);
     }
 }
 
