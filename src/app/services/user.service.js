@@ -2,16 +2,17 @@ const jwt = require('jsonwebtoken');
 const { User, Role } = require('../models')
 
 class UserService {
-    
-    async getAll(attributes, order, limit, offset) {
+
+    async getAll(attributes, where, order, limit, offset) {
 
         return await User
             .findAll({
                 include: [{ model: Role, as: 'roles' },],
-                attributes,                
+                attributes,
                 order,
                 limit,
-                offset
+                offset,
+                where
             })
             .then((list) => list)
             .catch((error) => { throw error });
@@ -23,10 +24,10 @@ class UserService {
             where: { email: newUser.email }
         })
             .then((user) => {
-                if (user) throw 'Email já esta cadastrado'                
+                if (user) throw 'Email já esta cadastrado'
             })
             .catch((error) => { throw error });
-        
+
         return await User
             .create(newUser)
             .then((newUser) => newUser)
@@ -47,7 +48,7 @@ class UserService {
                         password: updatedUser.password || user.password,
                     })
                     .then((updatedUser) => updatedUser)
-                    .catch((error) =>  { throw error });
+                    .catch((error) => { throw error });
             })
             .catch((error) => { throw error });
     }
@@ -66,7 +67,7 @@ class UserService {
             })
             .catch((error) => { throw error });
     }
-   
+
 
     async delete(id) {
         return await User

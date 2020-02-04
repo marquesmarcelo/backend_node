@@ -2,16 +2,17 @@ const userService = require('../services/user.service');
 
 const util = require('../utils/utils')
 
-class UserController {    
+class UserController {
     async getAll(req, res, next) {
-        const filter = req.query.attributes || { nome: "marcelo"};
-        const attributes = req.query.attributes || ['id', 'nome', 'email', 'createdAt', 'updatedAt'];
-        const order = req.query.order || [['nome', 'ASC']];
+        const { where } = req.body || {};
+        const { attributes } = req.body || ['id', 'nome', 'email', 'createdAt', 'updatedAt'];
+        const { order } = req.body || [['nome', 'ASC']];
+
         const limit = req.query.limit || 10;
         const offset = req.query.offset || 0;
 
         try {
-            const allUsers = await userService.getAll(attributes, order, limit, offset);
+            const allUsers = await userService.getAll(attributes, where, order, limit, offset);
             if (allUsers.length > 0) {
                 util.setSuccess(200, 'Usuários recuperados', allUsers);
             } else {
@@ -79,17 +80,17 @@ class UserController {
         try {
             const updateUser = await userService.update(id, alteredUser);
             util.setSuccess(200, 'Usuário atualizado', updateUser);
-                                   
+
         } catch (error) {
-            util.setError(404, error);            
+            util.setError(404, error);
         }
         return util.send(res);
     }
 
     async storeRole(req, res, next) {
         const alteredRole = req.body;
-        const user_id = req.params.user_id;        
-        try {            
+        const user_id = req.params.user_id;
+        try {
             const role = await userService.storeRole(user_id, alteredRole)
             util.setSuccess(200, 'Role adicionada ao usuário', role);
         } catch (error) {
