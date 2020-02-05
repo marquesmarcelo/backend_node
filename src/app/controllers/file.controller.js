@@ -6,8 +6,8 @@ class FileController {
     async upload(req, res, next) {
         console.log('File:', req.file)
 
-        const { originalname: nome, size, filename: key, path: url } = req.file
-
+        const { originalname: nome, size, filename: key } = req.file
+        const url = process.env.APP_URL+"/filesUploaded/"+ key
         try {
             const file = await fileService.create({
                 nome, size, key, url
