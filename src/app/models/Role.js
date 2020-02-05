@@ -8,7 +8,7 @@
  *       nome_maquina:
  *         type: string
  *       descricao:
- *         type: string     
+ *         type: string 
  *       createAt:
  *         type: string
  *         format: date-time
@@ -16,7 +16,11 @@
  *         type: string
  *         format: date-time
  *       required:
- *         - nome_maquina
+ *       - nome_maquina
+ *       - descricao
+ *     example:
+ *       nome: 'ROLE_ADMIN'
+ *       descricao: 'Permissão de Administrador'       
  */
 module.exports = (sequelize, DataTypes) => {
   const Role = sequelize.define('Role', {

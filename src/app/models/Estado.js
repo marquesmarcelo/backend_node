@@ -1,4 +1,26 @@
-'use strict';
+/**
+ * @swagger
+ * definitions:
+ *   Estado:
+ *     type: object
+ *     properties:
+ *       nome:
+ *         type: string
+ *       sigla:
+ *         type: string 
+ *       createAt:
+ *         type: string
+ *         format: date-time
+ *       updateAt:
+ *         type: string
+ *         format: date-time
+ *       required:
+ *       - nome
+ *       - sigla
+ *     example:
+ *       nome: 'Distrito Federal'
+ *       sigla: 'DF'       
+ */
 module.exports = (sequelize, DataTypes) => {
   const Estado = sequelize.define('Estado', {
     nome: DataTypes.STRING,
