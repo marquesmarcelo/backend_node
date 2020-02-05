@@ -7,7 +7,8 @@ class FileController {
         console.log('File:', req.file)
 
         const { originalname: nome, size, filename: key } = req.file
-        const url = process.env.APP_URL+"/filesUploaded/"+ key
+        const url = `${process.env.APP_URL}/filesUploaded/${key}`
+
         try {
             const file = await fileService.create({
                 nome, size, key, url
@@ -23,9 +24,9 @@ class FileController {
         try {
             const allFiles = await fileService.getAll();
             if (allFiles.length > 0) {
-                util.setSuccess(200, 'Usuários recuperados', allFiles);
+                util.setSuccess(200, 'Arquivos recuperados', allFiles);
             } else {
-                util.setSuccess(200, 'Nenhum usuário encontrado');
+                util.setSuccess(200, 'Nenhum arquivo encontrado');
             }
         } catch (error) {
             util.setError(400, error.message);
