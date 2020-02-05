@@ -7,14 +7,14 @@ const jwt = require('jsonwebtoken')
  *   User:
  *     type: object
  *     properties:
- *       id:
- *         type: integer
  *       nome:
  *         type: string
  *       email:
- *         type: integer
+ *         type: string
  *       password:
- *         type: string *       
+ *         type: string
+ *       roles:
+ *          $ref: '#/definitions/Role'
  *       createAt:
  *         type: string
  *         format: date-time
@@ -22,9 +22,13 @@ const jwt = require('jsonwebtoken')
  *         type: string
  *         format: date-time
  *       required:
- *         - nome
- *         - email
- *         - password
+ *       - nome
+ *       - email
+ *       - password
+ *       example:
+ *          nome: 'João da Silva'
+ *          email: 'joao.silva@empresa.com'
+ *          password: '123456'       
  */
 
 module.exports = (sequelize, DataTypes) => {

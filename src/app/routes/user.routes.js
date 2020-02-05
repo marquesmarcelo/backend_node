@@ -28,7 +28,7 @@ router.get('/', authorize(['ROLE_USER']), UserController.getAll); // admin only
 *         in: body
 *         schema:     
 *           type: object
-*           $ref: '#/src/app/models/User.js'
+*           $ref: '#/definitions/User'
 *           properties:
 *             email:
 *               type: string
